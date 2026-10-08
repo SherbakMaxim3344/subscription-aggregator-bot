@@ -1,28 +1,24 @@
 import asyncio
 import logging
-import os
 
-from aiogram import Bot, Dispatcher, types
-from aiogram.filters.command import Command
-from dotenv import load_dotenv
+from aiogram import Bot, Dispatcher
 from aiogram.client.session.aiohttp import AiohttpSession
 
-from bot_settings import set_commands
-from handlers.keyboard import router as keyboard
-from handlers.basic_handlers import router as router_basic
-from handlers.menu_handlers import router as router_menu
-
-load_dotenv()
-BOT_TOKEN = os.getenv("TOKEN_BOT")
-PROXY_URL = os.getenv("PROXY_URL")
-
-logging.basicConfig(level=logging.INFO)
-
-session = AiohttpSession(proxy=PROXY_URL)
-bot = Bot(token=BOT_TOKEN, session=session)
-dp=Dispatcher()
+from src.core.config_db import settings
+from src.core.database import async_session
+from src.bot.bot_settings import set_commands
+from src.bot.handlers.keyboard import router as keyboard
+from src.bot.handlers.basic_handlers import router as router_basic
+from src.bot.handlers.menu_handlers import router as router_menu
+from src.bot.middlewares import DbSessionMiddleware
 
 async def main():
+    logging.basicConfig(level=logging.INFO)
+
+    bot = Bot(token=settings.TOKEN_BOT, session=AiohttpSession(proxy=settings.PROXY_URL))
+    dp = Dispatcher()
+    dp.update.middleware(DbSessionMiddleware(async_session))
+
     dp.include_router(keyboard)
     dp.include_router(router_menu)
     dp.include_router(router_basic)
