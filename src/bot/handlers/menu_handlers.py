@@ -11,4 +11,5 @@ async def show_menu(message: types.Message):
         " - Высчитывать ваши траты на подписки\n"
         " - Уведомлять когда списание за подписки\n"
     )
+    await message.delete()
     await message.answer(text, parse_mode="HTML")

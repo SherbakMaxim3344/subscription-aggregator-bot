@@ -15,4 +15,5 @@ async def cmd_start(message: types.Message, session: AsyncSession):
         ],
         resize_keyboard=True
     )
+    await message.delete()
     await message.answer("Выбери действие:", reply_markup=kb)
