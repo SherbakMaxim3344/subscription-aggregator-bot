@@ -1,9 +1,13 @@
 #!/bin/bash
-docker compose up -d --build
+set -e
+cd "$(dirname "$0")"
+
+docker compose up -d --wait postgres
 
 cleanup() {
     docker compose down
 }
 trap cleanup EXIT INT TERM
 
-python -m src.bot.run
+venv/bin/python -m alembic upgrade head
+venv/bin/python -m src.bot.run
