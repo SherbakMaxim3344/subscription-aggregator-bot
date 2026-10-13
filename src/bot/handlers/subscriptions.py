@@ -7,22 +7,16 @@ from src.bot.handlers.menu_handlers import show_menu
 
 router = Router()
 
-@router.message(Command("add_subscription"))
-@router.callback_query(F.data == "add_sub")
-async def add_subscription(message: types.Message, state: FSMContext):
+async def start_add_flow(message: types.Message, state: FSMContext):
     await state.set_state(AddSubscription.name)
     await state.update_data(new_sub={})
-    await message.answer("Как называется подписка?\n\n/cancel - отменить")
+    await message.answer("Как называется подписка?")
 
-@router.message(Command("cancel"))
-async def cancel(message: types.Message, state: FSMContext):
-    if await state.get_state() is None:
-        return
-    await state.clear()
-    await message.answer("Отменено")
-    await show_menu(message)
+@router.message(Command("add_subscription"))
+async def cmd_add_subscription(message: types.Message, state: FSMContext):
+    await start_add_flow(message, state)
 
-@router.callback_query(F.data == "my_subs")
-async def cb_my_subs(cb: types.CallbackQuery):
-    await cb.message.answer("Тут список подписок")
+@router.callback_query(F.data == "add_sub")
+async def cb_add_subscription(cb: types.CallbackQuery, state: FSMContext):
+    await start_add_flow(cb.message, state)
     await cb.answer()
