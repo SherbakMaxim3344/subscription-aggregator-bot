@@ -1,7 +1,14 @@
 from aiogram import Router, types, F
 from aiogram.filters.command import Command
 
+from src.bot.admins import IsAdmin, admins
+
 router = Router()
+
+
+@router.message(F.text.lower().contains("сводка"), IsAdmin(admins))
+async def summary(message: types.Message):
+    await message.answer("DOT: сделать сводку")
 
 @router.message(F.photo)
 async def handler_photo(message: types.Message):
