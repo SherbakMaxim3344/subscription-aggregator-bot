@@ -7,7 +7,7 @@ from aiogram.client.session.aiohttp import AiohttpSession
 from src.core.config_db import settings
 from src.core.database import async_session
 from src.bot.bot_settings import set_commands
-# from src.bot.handlers.keyboard import router as keyboard
+from src.bot.handlers.keyboard import router as keyboard
 from src.bot.handlers.basic_handlers import router as router_basic
 from src.bot.handlers.menu_handlers import router as router_menu
 from src.bot.handlers.subscriptions import router as router_subscriptions
@@ -24,7 +24,7 @@ async def main():
     dp.update.middleware(DbSessionMiddleware(async_session))
 
     dp.include_router(router_start)
-    # dp.include_router(keyboard)
+    dp.include_router(keyboard)
     dp.include_router(router_menu)
     dp.include_router(router_subscriptions)
     dp.include_router(router_basic)
