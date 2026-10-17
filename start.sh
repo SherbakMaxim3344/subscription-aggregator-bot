@@ -2,7 +2,7 @@
 set -e
 cd "$(dirname "$0")"
 
-docker compose up -d --wait postgres
+docker compose up -d --wait
 
 cleanup() {
     docker compose down

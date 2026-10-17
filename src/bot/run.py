@@ -3,6 +3,8 @@ import logging
 
 from aiogram import Bot, Dispatcher
 from aiogram.client.session.aiohttp import AiohttpSession
+from aiogram.fsm.storage.redis import RedisStorage
+
 
 from src.core.config_db import settings
 from src.core.database import async_session
@@ -18,9 +20,9 @@ from src.bot.handlers.start import start_router as router_start
 
 async def main():
     logging.basicConfig(level=logging.INFO)
-
+    storage = RedisStorage.from_url(settings.REDIS_URL)
     bot = Bot(token=settings.TOKEN_BOT, session=AiohttpSession(proxy=settings.PROXY_URL))
-    dp = Dispatcher()
+    dp = Dispatcher(storage=storage)
     dp.update.middleware(DbSessionMiddleware(async_session))
 
     dp.include_router(router_start)

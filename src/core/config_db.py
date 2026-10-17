@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     PROXY_URL: str | None = None
 
     ADMINS: list[int] | int | None = None
+    REDIS_URL: str
 
     @property
     def DATABASE_URL_asyncpg(self) -> str:
