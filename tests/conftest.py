@@ -4,6 +4,7 @@ from sqlalchemy.pool import NullPool
 
 from src.core.config_db import settings
 from src.models import Base
+from src.repositories.users import get_or_create_user
 
 TEST_DB_URL = (
     f"postgresql+asyncpg://{settings.DB_USER}:{settings.DB_PASSWORD}"
@@ -23,3 +24,8 @@ async def session():
         yield s
 
     await engine.dispose()
+
+
+@pytest_asyncio.fixture
+async def user(session):
+    return await get_or_create_user(session, tg_id=111)
