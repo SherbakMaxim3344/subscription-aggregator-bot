@@ -28,6 +28,10 @@ services:
       timeout: 3s
       retries: 10
 
+  redis_gui:
+    image: redis/redisinsight
+    ports:
+      - 5540:5540
 volumes:
   pgdata:
   redisdata:
