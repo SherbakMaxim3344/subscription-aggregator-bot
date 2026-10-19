@@ -15,7 +15,7 @@ from src.bot.handlers.menu_handlers import router as router_menu
 from src.bot.middlewares import DbSessionMiddleware
 from src.bot.handlers.start import start_router as router_start
 from src.bot.states import router as router_add_sub
-
+from src.bot.handlers.subscriptions import router as show_subs
 
 async def main():
     logging.basicConfig(level=logging.INFO)
@@ -28,6 +28,7 @@ async def main():
     dp.include_router(router_add_sub)
     dp.include_router(keyboard)
     dp.include_router(router_menu)
+    dp.include_router(show_subs)
     dp.include_router(router_basic)
 
 
