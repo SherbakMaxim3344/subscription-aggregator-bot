@@ -13,6 +13,8 @@ from src.bot.handlers.keyboard import router as keyboard
 from src.bot.handlers.basic_handlers import router as router_basic
 from src.bot.handlers.menu_handlers import router as router_menu
 from src.bot.middlewares import DbSessionMiddleware
+from src.bot.middlewares import ThrottlingMiddleware
+from src.core.rate_limiter import RateLimiter
 from src.bot.handlers.start import start_router as router_start
 from src.bot.states import router as router_add_sub
 from src.bot.handlers.subscriptions import router as show_subs
@@ -23,6 +25,7 @@ async def main():
     bot = Bot(token=settings.TOKEN_BOT, session=AiohttpSession(proxy=settings.PROXY_URL))
     dp = Dispatcher(storage=storage)
     dp.update.middleware(DbSessionMiddleware(async_session))
+    dp.message.middleware(ThrottlingMiddleware(RateLimiter(storage.redis)))
 
     dp.include_router(router_start)
     dp.include_router(router_add_sub)
