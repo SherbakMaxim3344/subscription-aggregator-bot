@@ -42,3 +42,18 @@ def confirm_keyboard():
     kb.button(text="Отмена", callback_data="confirm:no")
     kb.adjust(2)
     return kb.as_markup()
+
+
+def delete_list_keyboard(subs):
+    kb = InlineKeyboardBuilder()
+    for s in subs:
+        kb.button(text=f" {s.name} — {s.price} ₽", callback_data=f"del:{s.id}")
+    kb.adjust(1)
+    return kb.as_markup()
+
+def delete_confirm_keyboard(sub_id: int):
+    kb = InlineKeyboardBuilder()
+    kb.button(text="Да, удалить", callback_data=f"del_yes:{sub_id}")
+    kb.button(text="Отмена", callback_data="del_no")
+    kb.adjust(2)
+    return kb.as_markup()
