@@ -16,6 +16,7 @@ async def show_menu(message: types.Message):
         inline_keyboard=[
             [InlineKeyboardButton(text="Добавить подписку", callback_data="add_sub")],
             [InlineKeyboardButton(text="Мои подписки", callback_data="my_subs")],
+            [InlineKeyboardButton(text="Удалить подписку", callback_data="del_sub")],
         ]
     )
     await message.delete()
