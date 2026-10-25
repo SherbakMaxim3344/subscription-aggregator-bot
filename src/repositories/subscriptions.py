@@ -24,10 +24,17 @@ async def list_subscriptions(session: AsyncSession, user_id: int):
     )
     return list(res.scalars().all())
 
-async def delete_subscriptions(session: AsyncSession, subs_id: int, user_id: int):
+async def delete_subscription(session: AsyncSession, subs_id: int, user_id: int):
     res = await session.execute(
         delete(Subscription)
         .where(Subscription.id == subs_id, Subscription.user_id == user_id)
     )
     await session.commit()
     return res.rowcount > 0
+
+
+async def get_subscription(session: AsyncSession, sub_id: int, user_id: int) -> Subscription | None:
+    result = await session.execute(
+        select(Subscription).where(Subscription.id == sub_id, Subscription.user_id == user_id)
+    )
+    return result.scalar_one_or_none()
