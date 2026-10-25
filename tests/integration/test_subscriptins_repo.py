@@ -1,7 +1,7 @@
 import pytest
 from datetime import date
 
-from src.repositories.subscriptions import add_subscription, delete_subscriptions
+from src.repositories.subscriptions import add_subscription, delete_subscription
 from src.models.enums import Period
 
 pytestmark = pytest.mark.integration
@@ -29,5 +29,5 @@ async def test_delete_subs(session, user):
                                     period=Period.WEEK,
                                     next_payment_date=date(2026, 12, 9)
                                 )
-    deleted = await delete_subscriptions(session=session, subs_id=sub.id, user_id=sub.user_id)
+    deleted = await delete_subscription(session=session, subs_id=sub.id, user_id=sub.user_id)
     assert deleted is True
