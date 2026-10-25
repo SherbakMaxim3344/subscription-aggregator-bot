@@ -1,7 +1,7 @@
 from datetime import date
 from decimal import Decimal
 
-from sqlalchemy import select
+from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.models import Subscription, Period
@@ -23,3 +23,11 @@ async def list_subscriptions(session: AsyncSession, user_id: int):
         .order_by(Subscription.next_payment_date)
     )
     return list(res.scalars().all())
+
+async def delete_subscriptions(session: AsyncSession, subs_id: int, user_id: int):
+    res = await session.execute(
+        delete(Subscription)
+        .where(Subscription.id == subs_id, Subscription.user_id == user_id)
+    )
+    await session.commit()
+    return res.rowcount > 0
